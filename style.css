@@ -230,7 +230,8 @@ p {
 @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    25% { background-position: 0% 50%; }
+     100% { background-position: 0% 50%; }
 }
 
 @keyframes floatParticles {
@@ -243,12 +244,14 @@ p {
     0% { opacity: 0.3; transform: scale(1); }
     50% { opacity: 0.8; transform: scale(1.1); }
     100% { opacity: 0.3; transform: scale(1); }
+     25% { opacity: 0.8; transform: scale(1.1); }
 }
 
 @keyframes bounceIn {
     0% { transform: translateY(100px); opacity: 0; }
     60% { transform: translateY(-10px); opacity: 1; }
     100% { transform: translateY(0); opacity: 1; }
+     60% { transform: translateY(-10px); opacity: 1; }
 }
 
 @keyframes slideInLeft {
