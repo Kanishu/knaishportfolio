@@ -70,6 +70,17 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
 
+    // Initialize EmailJS (loaded via CDN in index.html)
+    if (window.emailjs) {
+        try {
+            emailjs.init({ publicKey: '4iXzW_H6vIuaKk7Xc' });
+        } catch (err) {
+            console.warn('EmailJS init failed:', err);
+        }
+    } else {
+        console.warn('EmailJS SDK not loaded');
+    }
+
     // Contact form handling
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
@@ -82,22 +93,35 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show loading state
             submitBtn.textContent = 'Sending...';
             submitBtn.disabled = true;
+
+            if (!window.emailjs) {
+                alert('Email service unavailable. Please try again later.');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
             
-            // Simulate form submission
-            setTimeout(() => {
-                submitBtn.textContent = 'Message Sent!';
-                submitBtn.style.background = '#10b981';
-                
-                // Reset form
-                this.reset();
-                
-                // Reset button after delay
-                setTimeout(() => {
+            emailjs.sendForm('service_nvv1igr', 'template_4t7kwe8', this)
+                .then(() => {
+                    submitBtn.textContent = 'Message Sent!';
+                    submitBtn.style.background = '#10b981';
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Reset button after delay
+                    setTimeout(() => {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        submitBtn.style.background = '';
+                    }, 3000);
+                })
+                .catch((error) => {
+                    console.error('EmailJS error:', error);
+                    alert('Failed to send message. Please try again.');
                     submitBtn.textContent = originalText;
                     submitBtn.disabled = false;
-                    submitBtn.style.background = '';
-                }, 3000);
-            }, 2000);
+                });
         });
     }
 
